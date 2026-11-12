@@ -1,6 +1,8 @@
-export interface Book {
-  _id?: string;
+export interface BookDraft {
   title: string;
   author: string;
-  status: "Lido" | "Não lido";
+}
+
+export interface Book extends BookDraft {
+  id: string;
 }

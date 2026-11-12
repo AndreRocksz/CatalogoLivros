@@ -1,72 +1,52 @@
 import { useState } from "react";
-import type { ChangeEvent, FormEvent } from "react";
-import type { Book } from "../types/book";
+import type { FormEvent } from "react";
+import type { BookDraft } from "../types/book";
+import { cleanDraft } from "../services/catalog";
+import styles from "./BookForm.module.css";
 
-interface BookFormProps {
-    onAdd: (book: Omit<Book, "_id">) => void;
+const emptyDraft = { title: "", author: "" };
+
+export default function BookForm({ onAdd }: { onAdd: (draft: BookDraft) => boolean }) {
+  const [draft, setDraft] = useState(emptyDraft);
+  const [submitted, setSubmitted] = useState(false);
+  const clean = cleanDraft(draft);
+  const missingTitle = submitted && !clean.title;
+  const missingAuthor = submitted && !clean.author;
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSubmitted(true);
+
+    if (!clean.title || !clean.author) {
+      const field = event.currentTarget.elements.namedItem(clean.title ? "author" : "title");
+      if (field instanceof HTMLInputElement) field.focus();
+      return;
+    }
+
+    // Preserve os campos para nova tentativa quando a gravação falhar.
+    if (onAdd(clean)) {
+      setDraft(emptyDraft);
+      setSubmitted(false);
+    }
+  }
+
+  return (
+    <form className={styles.form} noValidate onSubmit={handleSubmit}>
+      <div className={styles.field}>
+        <label htmlFor="title">Título</label>
+        <input id="title" name="title" required value={draft.title}
+          aria-invalid={missingTitle} aria-describedby={missingTitle ? "title-error" : undefined}
+          onChange={(event) => setDraft({ ...draft, title: event.target.value })} />
+        {missingTitle && <span id="title-error" role="alert">Informe o título.</span>}
+      </div>
+      <div className={styles.field}>
+        <label htmlFor="author">Autor</label>
+        <input id="author" name="author" required value={draft.author}
+          aria-invalid={missingAuthor} aria-describedby={missingAuthor ? "author-error" : undefined}
+          onChange={(event) => setDraft({ ...draft, author: event.target.value })} />
+        {missingAuthor && <span id="author-error" role="alert">Informe o autor.</span>}
+      </div>
+      <button type="submit">Adicionar à estante</button>
+    </form>
+  );
 }
-function BookForm({ onAdd }: BookFormProps) {
-    const [formData, setFormData] = useState<Omit<Book, "_id">>({
-        title: "",
-        author: "",
-        status: "Não lido",
-    });
-
-    const handleChange = (
-        e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-    ) => {
-        const { name, value } = e.target;
-
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
-    };
-
-    const handleSubmit = (e: FormEvent) => {
-        e.preventDefault();
-
-        if (!formData.title || !formData.author) return;
-
-        onAdd(formData);
-
-        setFormData({
-            title: "",
-            author: "",
-            status: "Não lido",
-        });
-    };
-
-    return (
-        <form onSubmit={handleSubmit}>
-            <input
-                type="text"
-                name="title"
-                placeholder="Título"
-                value={formData.title}
-                onChange={handleChange}
-            />
-
-            <input
-                type="text"
-                name="author"
-                placeholder="Autor"
-                value={formData.author}
-                onChange={handleChange}
-            />
-
-            <select
-                name="status"
-                value={formData.status}
-                onChange={handleChange}
-            >
-                <option value="Não lido">Não lido</option>
-                <option value="Lido">Lido</option>
-            </select>
-
-            <button type="submit">Adicionar</button>
-        </form>
-    );
-}
-
-export default BookForm;

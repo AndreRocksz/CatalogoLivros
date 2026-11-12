@@ -1,24 +1,16 @@
 import type { Book } from "../types/book";
 import BookItem from "./BookItem";
+import styles from "./BookList.module.css";
 
-interface BookListProps {
-    books: Book[];
-    onDelete: (id: string) => void;
+export default function BookList({ books, onDelete }: {
+  books: Book[];
+  onDelete: (book: Book) => void;
+}) {
+  if (books.length === 0) return null;
+
+  return (
+    <ul className={styles.list}>
+      {books.map((book) => <BookItem key={book.id} book={book} onDelete={onDelete} />)}
+    </ul>
+  );
 }
-
-function BookList ({ books, onDelete }: BookListProps) {
-    
-    return (
-    <div className="list">
-        {books.length === 0 ? (
-        <p>Nenhum livro cadastrado.</p>
-        ) : (
-        books.map((book) => (
-            <BookItem key={book._id || book.title} book={book} onDelete={onDelete} />
-        ))
-        )}
-    </div>
-    );
-}
-
-export default BookList;

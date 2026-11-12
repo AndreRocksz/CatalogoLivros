@@ -1,0 +1,47 @@
+.page {
+  max-width: 72rem;
+  margin-inline: auto;
+  padding: clamp(1rem, 4vw, 3rem);
+}
+
+.header {
+  background: #1c4135;
+  color: #fbf5e8;
+  border-radius: 1.25rem;
+  padding: clamp(1.25rem, 5vw, 3.5rem);
+  margin-bottom: 1.5rem;
+}
+
+.header h1 {
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: clamp(2.75rem, 8vw, 5rem);
+  font-weight: 400;
+  line-height: 1.05;
+  margin-bottom: .65rem;
+}
+
+.header p { max-width: 36ch; }
+.layout { display: grid; gap: 1rem; align-items: start; }
+
+.collection, .registration {
+  min-width: 0;
+  background: #fffefa;
+  border: 1px solid #dad8cd;
+  border-radius: 1rem;
+  padding: clamp(1rem, 3vw, 1.75rem);
+}
+
+.layout h2 {
+  font-family: "Instrument Serif", Georgia, serif;
+  font-weight: 400;
+  font-size: 1.8rem;
+  margin-bottom: .85rem;
+}
+
+.count, .note { margin-top: .85rem; color: #4d5a52; }
+.feedback:not(:empty), .error:not(:empty) { margin-top: 1rem; }
+.error { color: #942b22; }
+
+@media (min-width: 48rem) {
+  .layout { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); }
+}

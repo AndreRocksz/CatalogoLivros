@@ -1,0 +1,17 @@
+.list { list-style: none; padding: 0; margin: .85rem 0 0; }
+
+.item {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 1rem;
+  justify-content: space-between;
+  align-items: center;
+  padding: .85rem 0;
+  border-top: 1px solid #dad8cd;
+  overflow-wrap: anywhere;
+}
+
+.item div { flex: 1 1 12rem; min-width: 0; }
+.item p { color: #4d5a52; }
+.item button { color: #812a22; background: transparent; border-color: #bd8f88; }
+.item button:hover { background: #faece8; }

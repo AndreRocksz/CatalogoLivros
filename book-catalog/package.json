@@ -7,10 +7,11 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "node --test tests/catalog.test.mjs",
+    "test:coverage": "node --test --experimental-test-coverage --test-coverage-include=src/services/*.ts tests/catalog.test.mjs"
   },
   "dependencies": {
-    "axios": "^1.15.1",
     "react": "^19.2.5",
     "react-dom": "^19.2.5"
   },
